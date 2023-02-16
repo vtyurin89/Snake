@@ -1,8 +1,8 @@
 class Settings:
 
     def __init__(self):
-        self.tile_W = 25
-        self.tile_H = 25
+        self.tile_W = 30
+        self.tile_H = 30
         self.tile_num = 20
 
         #основное поле
@@ -22,8 +22,7 @@ class Settings:
 
         #змейка
         self.snake_color = (127, 255, 128)
-        self.snake_x = 0
-        self.snake_y = 0
+        self.snake_tile_border = 1
 
 
         #еда

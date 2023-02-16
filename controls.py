@@ -32,3 +32,4 @@ def events(snake):
                 snake.move_left = False
                 snake.move_up = True
                 snake.move_down = False
+

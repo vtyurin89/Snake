@@ -20,6 +20,7 @@ def run_game():
 
         snake.show_snake()
         snake.eat_food()
+        #snake.snake_lose()
         pg.display.flip()
 
 
