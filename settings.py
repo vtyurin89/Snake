@@ -1,9 +1,9 @@
 class Settings:
 
     def __init__(self):
-        self.tile_W = 20
-        self.tile_H = 20
-        self.tile_num = 30
+        self.tile_W = 25
+        self.tile_H = 25
+        self.tile_num = 20
 
         #основное поле
         self.height = self.tile_H * self.tile_num

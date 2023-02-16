@@ -20,22 +20,26 @@ class Snake:
         #еда
         self.food_x = randint(0, 9) * 10
         self.food_y = randint(0, 9) * 10
+        self.new_food_check = False
+        self.rnd_pos = []
 
         #для временного тика
         self.event = threading.Event()
 
-
+        #ректы змеи и еды
         self.snake_main = pg.rect.Rect(
             (self.settings.snake_x, self.settings.snake_y, self.settings.tile_W, self.settings.tile_H))
+        self.rnd_pos = self.random_position()
         self.food = pg.rect.Rect(
-            (randint(0, self.settings.tile_num) * self.settings.tile_W, randint(0, self.settings.tile_num) * self.settings.tile_H, self.settings.tile_W, self.settings.tile_H))
-
+            (self.rnd_pos, self.rnd_pos, self.settings.tile_W, self.settings.tile_H))
         self.snake_list = [self.snake_main.copy()]
 
+    def random_position(self):
+        self.rnd_pos = randint(0, self.settings.tile_num - 1) * self.settings.tile_W
+        return self.rnd_pos
 
     def show_snake(self):
         [pg.draw.rect(self.screen, self.settings.snake_color, segment) for segment in self.snake_list]
-        pg.draw.rect(self.screen, self.settings.food_color, self.food)
 
         #движение
         self.event.wait(0.2)
@@ -52,14 +56,23 @@ class Snake:
         elif self.move_down:
             self.snake_dir = (0, self.settings.tile_H)
 
-        #поедание еды
+    def eat_food(self):
+        pg.draw.rect(self.screen, self.settings.food_color, self.food)
+        #поедание еды и генерация новой
         if pg.Rect.colliderect(self.food, self.snake_main):
-            self.food = pg.rect.Rect(
-                (randint(0, self.settings.tile_num - 1) * self.settings.tile_W,
-                 randint(0, self.settings.tile_num  - 1) * self.settings.tile_H, self.settings.tile_W, self.settings.tile_H))
             self.snake_list.append(self.snake_main.copy())
             print("Счёт: ", len(self.snake_list))
 
+            self.new_food_check = True
+            while self.new_food_check:
+                self.rnd_pos = self.random_position()
+                self.food = pg.rect.Rect((self.rnd_pos, self.rnd_pos, self.settings.tile_W, self.settings.tile_H))
+
+                # нужен код проверки еды
+                if pg.Rect.colliderect(self.food, self.snake_main):
+                    self.food = pg.rect.Rect((self.rnd_pos, self.rnd_pos, self.settings.tile_W, self.settings.tile_H))
+                else:
+                    self.new_food_check = False
 
 
 

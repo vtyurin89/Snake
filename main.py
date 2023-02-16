@@ -19,6 +19,7 @@ def run_game():
         screen.fill(settings.bg_color)
 
         snake.show_snake()
+        snake.eat_food()
         pg.display.flip()
 
 
