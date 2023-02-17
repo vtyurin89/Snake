@@ -1,15 +1,16 @@
 import pygame as pg
 from settings import Settings
-import threading
+import threading, sys
 from random import randint
 
 
-class Snake:
+class Snake():
 
     def __init__(self, screen):
         self.screen = screen
         self.settings = Settings()
         self.color = self.settings.snake_color
+        self.snake_length = 1
 
         self.snake_dir = (0, 0)
         self.move_right = False
@@ -44,7 +45,7 @@ class Snake:
         self.event.wait(0.12)
         self.snake_main.move_ip(self.snake_dir)
         self.snake_list.append(self.snake_main.copy())
-        self.snake_list = self.snake_list[1:]
+        self.snake_list = self.snake_list[-self.snake_length:]
 
         if self.move_right:
             self.snake_dir = (self.settings.tile_W, 0)
@@ -65,12 +66,46 @@ class Snake:
         if self.snake_main.top < 0 and self.move_up:
             self.snake_main.top = self.settings.height + self.settings.snake_tile_border
 
+
+
+    #возможная переделка движения? (сейчас не используется)
+    def show_snake_alt(self):
+        [pg.draw.rect(self.screen, self.settings.snake_color, segment) for segment in self.snake_list]
+
+        #движение
+        self.event.wait(0.12)
+        self.snake_main.move_ip(self.snake_dir)
+        self.snake_list.append(self.snake_main.copy())
+        self.snake_list = self.snake_list[-self.snake_length:]
+
+        if self.move_right:
+            self.snake_dir = (self.settings.tile_W, 0)
+        elif self.move_left:
+            self.snake_dir = (- self.settings.tile_W, 0)
+        elif self.move_up:
+            self.snake_dir = (0, - self.settings.tile_H)
+        elif self.move_down:
+            self.snake_dir = (0, self.settings.tile_H)
+
+        #границы
+        if self.snake_main.right > self.settings.width and self.move_right:
+            self.snake_main.right = - self.settings.snake_tile_border
+        if self.snake_main.left < 0 and self.move_left:
+            self.snake_main.left = self.settings.width + self.settings.snake_tile_border
+        if self.snake_main.bottom > self.settings.height and self.move_down:
+            self.snake_main.bottom = -self.settings.snake_tile_border
+        if self.snake_main.top < 0 and self.move_up:
+            self.snake_main.top = self.settings.height + self.settings.snake_tile_border
+
+
+
     def eat_food(self):
         pg.draw.rect(self.screen, self.settings.food_color, self.food)
 
         #поедание еды и генерация новой
         if pg.Rect.colliderect(self.food, self.snake_main):
             self.snake_list.append(self.snake_main.copy())
+            self.snake_length = self.snake_length + 1
             print("Счёт: ", len(self.snake_list))
 
             self.new_food_check = True
@@ -82,25 +117,12 @@ class Snake:
                     self.new_food_check = False
 
     def snake_lose(self):
-        if len(self.snake_list) > 4:
-            self.event.wait(0.5)
-            for self.segment in self.snake_list:
-                if pg.Rect.colliderect(self.segment, self.snake_main):
-                    self.snake_dir = (0, 0)
-                    self.move_right = False
-                    self.move_left = False
-                    self.move_up = False
-                    self.move_down = False
-                    print("GAME OVER")
-
-
-
-
-
-
-
-
-
+        self.collide_check = pg.Rect.collidelist(self.snake_main, self.snake_list[1:])
+        self.snake_moose = self.settings.game_over
+        if self.collide_check < len(self.snake_list)-3 and self.collide_check != -1 and self.collide_check != 0:
+            print(self.collide_check)
+            self.snake_moose = True
+            print(self.snake_moose)
 
 
 

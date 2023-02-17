@@ -28,3 +28,6 @@ class Settings:
         #еда
         self.food_color = 'red'
 
+        #конец игры
+        self.game_over = False
+
