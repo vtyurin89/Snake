@@ -1,6 +1,6 @@
 import pygame as pg
 from settings import Settings
-import threading, sys
+import threading
 from random import randint
 
 
@@ -118,11 +118,10 @@ class Snake():
 
     def snake_lose(self):
         self.collide_check = pg.Rect.collidelist(self.snake_main, self.snake_list[1:])
-        self.snake_moose = self.settings.game_over
+        self.snake_hit = False
         if self.collide_check < len(self.snake_list)-3 and self.collide_check != -1 and self.collide_check != 0:
             print(self.collide_check)
-            self.snake_moose = True
-            print(self.snake_moose)
+            self.snake_hit = True
 
 
 

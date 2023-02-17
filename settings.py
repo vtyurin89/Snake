@@ -1,3 +1,6 @@
+import pygame as pg
+
+
 class Settings:
 
     def __init__(self):
@@ -11,6 +14,8 @@ class Settings:
         self.caption = "Snake"
         self.bg_color = (63, 107, 193)
         self.fps = 60
+        self.middle_pos_H = self.height / 2
+        self.middle_pos_W = self.width / 2
 
         #игровое поле
         self.grid_color = (43, 65, 114)
@@ -29,5 +34,6 @@ class Settings:
         self.food_color = 'red'
 
         #конец игры
-        self.game_over = False
+        self.final_message = "GAME OVER"
+        self.final_font = pg.font.Font(None, 36)
 
